@@ -20,3 +20,7 @@ def parse_equation(equation):
       equation = split[0]
       i += 1
     return dict
+    
+def parse_restriction(restriction):
+    
+    parse_equation()
