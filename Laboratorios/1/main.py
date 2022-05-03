@@ -27,6 +27,8 @@ import sys
 def main():
   #print(parser_simplex.parse_equation("-3.8x1 + 5x2 -2x3 + x4 -9x5"))
   restriction = "-3.8x1 + 5x2 -2x3 + x4 -9x5 >= 23"
+  # ejemplo = "30x1 + 100x2", ["x1 + x2 <= 7", "4x1 + 10x2 <= 40", "10x1 >= 30"], True
+
   print(parser_simplex.parse_restriction(restriction))
 
 if __name__ == "__main__":
