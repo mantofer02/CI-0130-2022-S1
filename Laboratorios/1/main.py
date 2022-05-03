@@ -1,4 +1,4 @@
-import parser
+import parser_simplex
 import sys
 
 # def main():
@@ -25,8 +25,9 @@ import sys
 #             lines = f.readlines()
 
 def main():
-  # print(parser.parse_equation("-3.8x1 + 5x2 -2x3 + x4 -9x5"))
-  print(parser.parse_restriction("-3.8x1 + 5x2 -2x3 + x4 -9x5 >= 23"))
+  #print(parser_simplex.parse_equation("-3.8x1 + 5x2 -2x3 + x4 -9x5"))
+  restriction = "-3.8x1 + 5x2 -2x3 + x4 -9x5 >= 23"
+  print(parser_simplex.parse_restriction(restriction))
 
 if __name__ == "__main__":
     main()
