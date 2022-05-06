@@ -1,6 +1,5 @@
-# @param:
-#   equation: -3.8x1 + 5x2 -2x3
-# @output: 'x1': -3.8, 'x2': 5.0, 'x3': -2.0
+M = 1000
+
 def parse_equation(equation):
     dict = {}
     equation = equation.replace("+", " ")
@@ -41,21 +40,45 @@ def parse_restriction(restriction):
 def parse_problem(objective, restrictions, maximize):
     parsed_eq = parse_equation(objective)
     n_obj_var = len(parsed_eq)
+    n_restrictions = len(restrictions)
     parsed_restrictions = []
-    coef_array = []
+    coeficients = []
+    variables = []
+    simplex_matrix = []
 
     for key in parsed_eq:
-        coef_array.append(key)
+        variables.append(key)
+        coeficients.append(int(parsed_eq.get(key)))
 
     for i in range(len(restrictions)):
-        coef_array.append("s" + str(i + 1))
+        variables.append("s" + str(i + 1))
+        coeficients.append(0)
         parsed_restrictions.append(parse_restriction(restrictions[i]))
 
-    for i in range(len(restrictions)):
         if parsed_restrictions[i][2] == False:
-          coef_array.append("a" + str(i + 1))
-    print(coef_array)
+            variables.append("a" + str(i + 1))
+            coeficients.append(M) if maximize else coeficients.append(-1 * M)
+
+    for i in range(n_restrictions):
+        row = []
+        restriction = parsed_restrictions[i][0]
+        is_upper_bound = parsed_restrictions[i][2]
+        for j in range(len(variables) + 1):
+            value = restriction.get("x" + str(j + 1))
+            if value:
+                row.append(int(value))
+            elif j == n_obj_var + i:
+                row.append(1) if is_upper_bound else row.append(-1)
+            elif j == len(variables):
+                row.append(int(parsed_restrictions[i][1]))
+            elif j == len(variables) - 1:
+                row.append(0) if is_upper_bound else row.append(1)
+            else:
+                row.append(0)
+        simplex_matrix.append(row)
+
+    return [coeficients, simplex_matrix, variables]
 
 
-parse_problem("30x1 + 100x2", ["x1 + x2 <= 7",
-              "4x1 + 10x2 <= 40", "10x1 >= 30"], True)
+print(parse_problem("30x1 + 100x2", ["x1 + x2 <= 7",
+                                     "4x1 + 10x2 <= 40", "10x1 >= 30"], True))
