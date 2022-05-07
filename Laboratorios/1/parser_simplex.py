@@ -79,8 +79,8 @@ def parse_problem(objective, restrictions, maximize):
                 row.append(0)
         simplex_matrix.append(row)
 
-    return [coeficients, simplex_matrix, variables]
+    return coeficients, simplex_matrix, variables
 
 
-print(parse_problem("30x1 + 100x2", ["x1 + x2 <= 7",
-                                     "4x1 + 10x2 <= 40", "10x1 >= 30"], True))
+objective, restrictions, variables = parse_problem("30x1 + 100x2", ["x1 + x2 <= 7", "4x1 + 10x2 <= 40", "10x1 >= 30"], True)
+math_simplex.simplex(objective, restrictions, variables, True)
