@@ -59,7 +59,7 @@ def parse_problem(objective, restrictions, maximize):
 
         if parsed_restrictions[i][2] == False:
             variables.append("a" + str(i + 1))
-            coeficients.append(M) if maximize else coeficients.append(-1 * M)
+            coeficients.append(-1 * M) if maximize else coeficients.append(M)
 
     for i in range(n_restrictions):
         row = []
