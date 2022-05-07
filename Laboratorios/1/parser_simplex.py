@@ -1,5 +1,7 @@
 M = 1000
 
+import math_simplex
+
 def parse_equation(equation):
     dict = {}
     equation = equation.replace("+", " ")
