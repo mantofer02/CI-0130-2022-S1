@@ -1,5 +1,6 @@
-from pickle import FALSE
 import numpy as np
+
+MAX_VAL = 10000
 
 # objective is Z
 
@@ -21,7 +22,13 @@ def simplex(objective, restrictions, variables, maximize):
         zj_array[i] = np.sum(multip_array)
 
     z_minus_zj_array = objective[:] - zj_array[:]
-    print(z_minus_zj_array)
+    # print(z_minus_zj_array)
+
+    if (not is_solution(z_minus_zj_array, maximize)):
+        pivot_col = get_pivot_col(z_minus_zj_array, maximize)
+        # vlaidate
+        pivot_row = get_pivot_row(restrictions[:, pivot_col])
+        pass
 
 
 def is_solution(z_minus_zj_array, maximize):
@@ -37,4 +44,24 @@ def is_solution(z_minus_zj_array, maximize):
         return True
 
 
-print(is_solution([0, 0, -1, 0, 0], False))
+def get_pivot_col(z_minus_zj_array, maximize):
+    if (maximize):
+        return np.where(z_minus_zj_array == np.amax(z_minus_zj_array))[0][0]
+    else:
+        return np.where(z_minus_zj_array == np.amin(z_minus_zj_array))[0][0]
+
+
+def get_pivot_row(column, b_row):
+    ratio_row = np.copy(b_row)
+    index = 0
+    min_value = MAX_VAL
+    for i in range(len(ratio_row)):
+        if ratio_row[i] > 0 and column[i] > 0:
+            ratio_row[i] = ratio_row[i] / column[i]
+            if (ratio_row[i]) < min_value:
+                min_value = ratio_row[i]
+                index = i
+    return index
+
+
+print(get_pivot_row([2, 3, 1], [400, 300, 90]))
