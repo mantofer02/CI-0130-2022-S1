@@ -14,10 +14,11 @@ def simplex(objective, restrictions, variables, maximize):
 
     # c array is not always 0
     c_array = np.zeros(len(restrictions))
-    zj_array = np.zeros(len(variables))
+    # usa la expndida
+    zj_array = np.zeros(len(variables) + 1)
     z_minus_zj_array = np.zeros(len(variables))
 
-    for i in range(len(restrictions_np)):
+    for i in range(len(variables) + 1):
         multip_array = np.multiply(c_array, restrictions_np[:, i])
         zj_array[i] = np.sum(multip_array)
 
@@ -56,7 +57,7 @@ def get_pivot_row(column, b_row):
     index = 0
     min_value = MAX_VAL
     for i in range(len(ratio_row)):
-        if ratio_row[i] > 0 and column[i] > 0:
+        if ratio_row[i] >= 0 and column[i] > 0:
             ratio_row[i] = ratio_row[i] / column[i]
             if (ratio_row[i]) < min_value:
                 min_value = ratio_row[i]
