@@ -2,8 +2,10 @@ M = 1000
 
 def parse_equation(equation):
     dict = {}
+    # print(equation)
     equation = equation.replace("+", " ")
     i = 1
+
     while equation:
         var = "x" + str(i)
         split = equation.split(var, 1)
@@ -14,8 +16,9 @@ def parse_equation(equation):
         elif value == '-':
             value = "-1"
 
-        dict[var] = value.split()[0]
-        equation = split[0]
+        if len(split) > 0:
+          dict[var] = value.split()[0]
+          equation = split[0]
         i += 1
     return dict
 
