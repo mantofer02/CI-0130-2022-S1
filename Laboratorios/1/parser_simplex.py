@@ -1,7 +1,5 @@
 M = 1000
 
-import math_simplex
-
 def parse_equation(equation):
     dict = {}
     equation = equation.replace("+", " ")
@@ -50,13 +48,14 @@ def parse_problem(objective, restrictions, maximize):
 
     for key in parsed_eq:
         variables.append(key)
-        coeficients.append(int(parsed_eq.get(key)))
+        coeficients.append(float(parsed_eq.get(key)))
 
     for i in range(len(restrictions)):
         variables.append("s" + str(i + 1))
         coeficients.append(0)
         parsed_restrictions.append(parse_restriction(restrictions[i]))
 
+    for i in range(len(restrictions)):
         if parsed_restrictions[i][2] == False:
             variables.append("a" + str(i + 1))
             coeficients.append(-1 * M) if maximize else coeficients.append(M)
@@ -68,19 +67,15 @@ def parse_problem(objective, restrictions, maximize):
         for j in range(len(variables) + 1):
             value = restriction.get("x" + str(j + 1))
             if value:
-                row.append(int(value))
+                row.append(float(value))
             elif j == n_obj_var + i:
                 row.append(1) if is_upper_bound else row.append(-1)
             elif j == len(variables):
-                row.append(int(parsed_restrictions[i][1]))
-            elif j == len(variables) - 1:
+                row.append(float(parsed_restrictions[i][1]))
+            elif j == n_obj_var + n_restrictions + i:
                 row.append(0) if is_upper_bound else row.append(1)
             else:
                 row.append(0)
         simplex_matrix.append(row)
 
     return coeficients, simplex_matrix, variables
-
-
-objective, restrictions, variables = parse_problem("30x1 + 100x2", ["x1 + x2 <= 7", "4x1 + 10x2 <= 40", "10x1 >= 30"], True)
-math_simplex.simplex(objective, restrictions, variables, True)

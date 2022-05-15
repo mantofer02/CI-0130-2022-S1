@@ -1,9 +1,13 @@
 import numpy as np
+import parser_simplex
 
 MAX_VAL = 10000
 
 # objective is Z
-
+def simplex_solver(objective, restrictions, maximize):
+  objective_parsed, restrictions_parsed, variables_parsed = parser_simplex.parse_problem(objective, restrictions, maximize)
+  result = simplex(objective_parsed, restrictions_parsed, variables_parsed, maximize)
+  print(result)
 
 def simplex(objective, restrictions, variables, maximize):
     objective_np = np.array(objective)
@@ -29,21 +33,22 @@ def simplex(objective, restrictions, variables, maximize):
     while (not is_solution(z_minus_zj_array, maximize)):
         pivot_col = get_pivot_col(z_minus_zj_array, maximize)
         pivot_row = get_pivot_row(restrictions_np[:, pivot_col], restrictions_np[:, len(variables)])
-        restrictions_np[pivot_row, :] = restrictions_np[pivot_row, :] / restrictions[pivot_row][pivot_col]
+        restrictions_np[pivot_row, :] = restrictions_np[pivot_row, :] / restrictions_np[pivot_row][pivot_col]
 
         for i in range(len(restrictions_np)):
             if i is not pivot_row:
-                restrictions_np[i, :] = (-1*restrictions_np[i][pivot_col]* restrictions_np[pivot_row, :]) + restrictions_np[i, :]
+                restrictions_np[i, :] = (-1 * restrictions_np[i][pivot_col] * restrictions_np[pivot_row, :]) + restrictions_np[i, :]
 
         var_col[pivot_row] = variables[pivot_col]
         c_col[pivot_row] = objective[pivot_col]
 
-          
         for i in range(len(variables)):
             multip_array = np.multiply(c_col, restrictions_np[:, i])
             zj_array[i] = np.sum(multip_array)
 
         z_minus_zj_array = objective[:] - zj_array[:]
+
+    return form_solution(var_col, c_col, restrictions_np, len(variables))
 
 
 def is_solution(z_minus_zj_array, maximize):
@@ -99,8 +104,12 @@ def init_c_col(var_col, objective, variables):
             var_col_index += 1
     return c_array
 
-def fill_z_array():
-  pass
-# get_pivot_row([2, 3, 1], [400, 300, 90])
-# var_col = init_var_col(["x1", "x2", "s1", "s2", "s3", "a3"])
-# print(init_c_col(var_col, [30.0, 100.0, 0, 0, 0, -10000], ["x1", "x2", "s1", "s2", "s3", "a3"]))
+def form_solution(var_col, c_col, restrictions_np, len_variables):
+  tuple_array = []
+  for i in range(len(var_col)):
+      tuple_array.append((var_col[i], restrictions_np[i][len_variables]))
+
+  multip_array = np.multiply(c_col, restrictions_np[:, len_variables])
+  optimal_value = np.sum(multip_array)
+
+  return tuple_array, optimal_value
