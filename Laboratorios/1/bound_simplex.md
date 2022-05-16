@@ -1,9 +1,9 @@
-# CI-0130-2022-S1
+# CI-0130-2022-S1 | Laboratory 1
 
-Marco Ferraro | B82957
-Gabriel Bogantes |
+**B82957** | Marco Ferraro Rodriguez
+**B71146** | Gabriel Bogantes Armijo
 
-- [CI-0130-2022-S1](#ci-0130-2022-s1)
+- [CI-0130-2022-S1 | Laboratory 1](#ci-0130-2022-s1--laboratory-1)
   - [Simplex method with bounding](#simplex-method-with-bounding)
   - [LP Tree](#lp-tree)
 
