@@ -14,7 +14,6 @@ def load_words(file_name):
 
 
 def add_decorators(words, decorator, n):
-
     concatenate_string = decorator * n
     for index in range(len(words)):
         words[index] = concatenate_string + \
