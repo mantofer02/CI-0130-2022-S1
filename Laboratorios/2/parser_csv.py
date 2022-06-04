@@ -11,7 +11,6 @@ def load_words(file_name):
         for index in row:
             parsed_list.append(index)
     return parsed_list
-    pass
 
 
 def add_decorators(words, decorator, n):
@@ -22,8 +21,9 @@ def add_decorators(words, decorator, n):
             words[index].lower() + concatenate_string
     return(words)
 
-
 # Fix
+
+
 def get_sequences(words, n):
     sequence_array = []
     temp_string = ""
