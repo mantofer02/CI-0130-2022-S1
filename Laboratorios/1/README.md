@@ -1,13 +1,26 @@
-# CI-0130-2022-S1
+# CI-0130-2022-S1 | Laboratory 1
 
 This project was developed by:
-- Marco Ferraro Rodriguez B82957
-- Gabriel Bogantes Armijo B71146
 
-## What is Lineal Programing?
+**B82957** | Marco Ferraro Rodriguez
+**B71146** | Gabriel Bogantes Armijo
 
-<p> Lineal programing, also known as linear optimization is a mathematical method to best achieve optimization regarding minimization and
-maximization of costs.It is based in lineal relationships, the procedure consists of analizing an objective function that is subject 
+- [CI-0130-2022-S1 | Laboratory 1](#ci-0130-2022-s1--laboratory-1)
+  - [What is Linear Programing?](#what-is-linear-programing)
+  - [How does the simplex method work?](#how-does-the-simplex-method-work)
+    - [History](#history)
+    - [Overview](#overview)
+    - [Standard form](#standard-form)
+    - [Simplex tableau](#simplex-tableau)
+    - [Pivot operations](#pivot-operations)
+  - [How does the bounded linear programing works?](#how-does-the-bounded-linear-programing-works)
+    - [Algorithm](#algorithm)
+  - [Run the program](#run-the-program)
+
+## What is Linear Programing?
+
+<p> Linear programing, also known as linear optimization is a mathematical method to best achieve optimization regarding minimization and
+maximization of costs.It is based in linear relationships, the procedure consists of analizing an objective function that is subject 
 to linear equality and linear inequality constraints. Its design is always based as a convex polytope when drawn in an "X" and "Y" ascis table. The idea behind linear programing is to find all the points in the polytope where this function has the smallest or largest value if such point exists. It is important to note that one of the restraints behind this mathematical procedure is that every possible value always has to be positive. </p>
 
 <p>There are several ways to complete this algorithm, the following are the main ones:
@@ -20,7 +33,9 @@ to linear equality and linear inequality constraints. Its design is always based
 </p>
 
 ## How does the simplex method work?
+
 ### History
+
 <p> The simplex algorithm was originally developed by George Bernard Dantzig. This American mathematician worked on planning methods for the US Army Air Force during World War II.
 During 1946 his colleague challenged him to create a planning process to distract him from taking another job, he did through formulating linear inequalities inspired by
 Wassily Leontief (input-output analyst). During 1947 Dantzig included an objective function as part of his formulation, this made his theory more mathematically tractable. Later, Dantzig published
@@ -28,6 +43,7 @@ his research as a thesis to earn his doctorate. After that, the column used in t
 </p>
 
 ### Overview
+
 <p>
 The simplex algorithm operates on linear programs in the canonical form:
 
@@ -43,9 +59,10 @@ The solution of a linear program is acomplished in two steps:
 </ol>
 
 ### Standard form
+
 <p>The transformation of a liuner program to one in standard form is done by the following way: 
 
-For each variable with a lower bound other than 0, a new variable is introuced representing the difference between the variable and bound. For instance: 
+For each variable with a lower bound other than 0, a new variable is introuced representing the difference between the variable and bound. For instance:
 
 
 <strong>x<sub>1</sub> >= 5</strong> </p>
@@ -96,6 +113,10 @@ For this specific simplex calculator the user has to enter the equation and the 
 
 When the equation and restrictions are set and ready to be calculated, the user is able to run the program by running the following commands in the respective directory: 
 
-<center><code> python main.py </python> </center>
+<center>
+  <code> 
+    python main.py 
+  </code> 
+</center>
 
-
+[Bound Simplex Exercise](bound_simplex.md)

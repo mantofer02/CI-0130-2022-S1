@@ -16,20 +16,15 @@ def simplex(objective, restrictions, variables, maximize):
     restrictions_np = np.array(restrictions)
     restrictions_np = restrictions_np.astype(np.float64)
 
-    # c array is not always 0
     var_col = init_var_col(variables)
     c_col = init_c_col(var_col, objective, variables)
-    # usa la expndida
     zj_array = np.zeros(len(variables))
     z_minus_zj_array = np.zeros(len(variables))
 
-    for i in range(len(variables)):
-        multip_array = np.multiply(c_col, restrictions_np[:, i])
-        zj_array[i] = np.sum(multip_array)
+    set_zj_array(zj_array, restrictions_np, c_col, len(variables))
 
     z_minus_zj_array = objective[:] - zj_array[:]
 
-    # an iteration
     while (not is_solution(z_minus_zj_array, maximize)):
         pivot_col = get_pivot_col(z_minus_zj_array, maximize)
         pivot_row = get_pivot_row(restrictions_np[:, pivot_col], restrictions_np[:, len(variables)])
@@ -42,9 +37,7 @@ def simplex(objective, restrictions, variables, maximize):
         var_col[pivot_row] = variables[pivot_col]
         c_col[pivot_row] = objective[pivot_col]
 
-        for i in range(len(variables)):
-            multip_array = np.multiply(c_col, restrictions_np[:, i])
-            zj_array[i] = np.sum(multip_array)
+        set_zj_array(zj_array, restrictions_np, c_col, len(variables))
 
         z_minus_zj_array = objective[:] - zj_array[:]
 
@@ -83,6 +76,11 @@ def get_pivot_row(column, b_col):
                 index = i
     return index
 
+
+def set_zj_array(zj_array, restrictions_np, c_col, n_variables):
+    for i in range(n_variables):
+        multip_array = np.multiply(c_col, restrictions_np[:, i])
+        zj_array[i] = np.sum(multip_array)
 
 def init_var_col(variables):
     var_col = []

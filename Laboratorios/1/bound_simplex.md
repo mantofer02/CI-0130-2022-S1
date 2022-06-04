@@ -1,9 +1,6 @@
-# CI-0130-2022-S1 | Laboratory 1
+# CI-0130-2022-S1 | Laboratory 1 | Bound Simplex
 
-**B82957** | Marco Ferraro Rodriguez
-**B71146** | Gabriel Bogantes Armijo
-
-- [CI-0130-2022-S1 | Laboratory 1](#ci-0130-2022-s1--laboratory-1)
+- [CI-0130-2022-S1 | Laboratory 1 | Bound Simplex](#ci-0130-2022-s1--laboratory-1--bound-simplex)
   - [Simplex method with bounding](#simplex-method-with-bounding)
   - [LP Tree](#lp-tree)
 
