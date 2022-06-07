@@ -1,19 +1,13 @@
 import sys
 import parser_csv
 import model
+import random
 
 
 def main():
-    n = 1
-    decorator = '$'
-
-    words = parser_csv.load_words('names.csv')
-    words_with_decorators = parser_csv.add_decorators(
-        words, decorator=decorator, n=n)
-
-    sequences = parser_csv.get_sequences(words=words_with_decorators, n=n)
-    model.calculate_transitions(
-        words=words_with_decorators, sequences=sequences)
+    words = parser_csv.load_words('test.csv')
+    my_model = model.create_model(words=words, ngrams=1)
+    print(model.generate_word(my_model, 17))
 
 
 if __name__ == "__main__":
