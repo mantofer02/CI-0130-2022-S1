@@ -1,9 +1,10 @@
-
-from operator import pos
+from time import time
 import numpy as np
 import random
+import utils
 
 # It is ready
+DECORATOR = "$"
 
 
 def calculate_transitions(words, sequences):
@@ -16,11 +17,19 @@ def calculate_transitions(words, sequences):
             occurency = sequences[i] + sequences[j]
             for element in words:
                 times = element.count(occurency)
+                # o$$$
+                # if(sequences[j] == "$$"):
+                #     print(occurency)
+                #     print(element)
+                #     print(times)
                 prob_matrix[i][j] += times
                 counter += times
 
         if (counter != 0):
             prob_matrix[i][:] = prob_matrix[i][:] / counter
+    print(sequences)
+    print(prob_matrix)
+    input()
     return prob_matrix
 
 
@@ -67,11 +76,14 @@ def generate_word(model, seed):
 
     word = ''
 
-    finalState = False
+    final_state = False
     position = 0
     row = transition[0]
 
-    while not finalState:
+    while not final_state:
+        # print(transition[position])
+        # print(position)
+        # input()
 
         random_value = r.random()
         for i in range(len(row)):
@@ -82,7 +94,7 @@ def generate_word(model, seed):
                 random_value = random_value - row[i]
 
         if position == 0:
-            finalState = True
+            final_state = True
         else:
             word += sequences[position]
             row = transition[position]
