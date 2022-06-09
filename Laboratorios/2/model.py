@@ -1,4 +1,5 @@
 from time import time
+from typing import Concatenate
 import numpy as np
 import random
 
@@ -88,9 +89,29 @@ def generate_word(model, seed):
             word += sequences[position][-1]
             row = transition[position]
 
+    print(get_probability(model=model, word="mew"))
     return word.replace(DECORATOR, "").capitalize()
 
 
 def get_probability(model, word):
-    transition = model[0]
+    prob_matrix = model[0]
     sequences = model[1]
+
+    word = word.lower()
+    concatenate_string = DECORATOR * len(sequences[0])
+    word = concatenate_string + word + concatenate_string
+
+    probability = float(0)
+    n = len(sequences[0])
+
+    for i in range(len(sequences)):
+        index = word.find(sequences[i])
+        if index != -1:
+            for j in range(len(sequences)):
+                if (word[index + 1: index + 1 + n] == sequences[j]):
+                    if probability == float(0):
+                        probability += prob_matrix[i][j]
+                    else:
+                        probability = probability * prob_matrix[i][j]
+
+    return probability
