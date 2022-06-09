@@ -20,6 +20,7 @@ def calculate_transitions(words, sequences):
 
 
 def create_model(words, ngrams):
+    
     pass
 
 
