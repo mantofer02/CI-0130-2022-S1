@@ -4,9 +4,9 @@ import model
 
 
 def main():
-    words = parser_csv.load_words('test.csv')
-    my_model = model.create_model(words=words, ngrams=2)
-    print(model.generate_word(my_model, 17))
+    words = parser_csv.load_words('pokemon.csv')
+    my_model = model.create_model(words=words, ngrams=3)
+    print(model.generate_word(my_model, 21))
 
 
 if __name__ == "__main__":

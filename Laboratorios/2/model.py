@@ -1,9 +1,7 @@
 from time import time
 import numpy as np
 import random
-import utils
 
-# It is ready
 DECORATOR = "$"
 
 
@@ -11,25 +9,19 @@ def calculate_transitions(words, sequences):
     prob_matrix = np.zeros(shape=(len(sequences), len(sequences)))
     prob_matrix.dtype = np.dtype(np.float64)
 
+    n = len(sequences[0])
+
     for i in range(len(sequences)):
         counter = 0
-        for j in range(len(sequences)):
-            occurency = sequences[i] + sequences[j]
-            for element in words:
-                times = element.count(occurency)
-                # o$$$
-                # if(sequences[j] == "$$"):
-                #     print(occurency)
-                #     print(element)
-                #     print(times)
-                prob_matrix[i][j] += times
-                counter += times
-
-        if (counter != 0):
+        for element in words:
+            index = element.find(sequences[i])
+            if index != -1:
+                for j in range(len(sequences)):
+                    if (element[index + 1: index + 1 + n] == sequences[j]):
+                        prob_matrix[i][j] += 1
+                        counter += 1
+        if counter != 0:
             prob_matrix[i][:] = prob_matrix[i][:] / counter
-    print(sequences)
-    print(prob_matrix)
-    input()
     return prob_matrix
 
 
@@ -81,9 +73,6 @@ def generate_word(model, seed):
     row = transition[0]
 
     while not final_state:
-        # print(transition[position])
-        # print(position)
-        # input()
 
         random_value = r.random()
         for i in range(len(row)):
@@ -96,11 +85,12 @@ def generate_word(model, seed):
         if position == 0:
             final_state = True
         else:
-            word += sequences[position]
+            word += sequences[position][-1]
             row = transition[position]
 
-    return word
+    return word.replace(DECORATOR, "").capitalize()
 
 
 def get_probability(model, word):
-    pass
+    transition = model[0]
+    sequences = model[1]
