@@ -1,8 +1,6 @@
 import numpy as np
 import random
 
-# DECORATOR = "$"
-
 
 class Model:
     def __init__(self) -> None:

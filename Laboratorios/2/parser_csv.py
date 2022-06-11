@@ -1,5 +1,4 @@
 import csv
-import numpy as np
 
 
 def load_words(file_name):
