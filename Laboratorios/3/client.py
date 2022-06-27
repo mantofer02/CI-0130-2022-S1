@@ -11,6 +11,9 @@ class Client:
     def is_waiting(self):
         return self.waiting
 
+    def set_wait(self, status):
+        self.waiting = status
+
     def go_to_server(self):
         self.waiting = False
 
@@ -18,7 +21,7 @@ class Client:
         self.queue_time += 1
 
     def increment_serverd_time(self):
-        self.server_time += 1
+        self.served_time += 1
 
     def tick(self):
         if (not self.finished):

@@ -19,8 +19,13 @@ class Server:
     def increment_free_time(self):
         self.free_time += 1
 
-    def add_client(self, client):
+    def add_client(self, client: Client):
         self.current_client = client
+
+    def free_server(self):
+        client = self.current_client
+        self.current_client = None
+        return client
 
     def tick(self):
         if (not self.finished):
