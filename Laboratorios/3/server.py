@@ -20,6 +20,7 @@ class Server:
         self.free_time += 1
 
     def add_client(self, client: Client):
+        self.serving_time = 0
         self.current_client = client
 
     def free_server(self):
