@@ -44,6 +44,17 @@ class Queue:
         self.simulation(TIME_LIMIT)
         self.print_results()
 
+    """
+        @function
+        init_servers
+        @description
+        Constructor that initializes servers.
+        ----------
+        @parameters
+        ----------
+        self
+    """
+
     def init_servers(self):
         for i in range(self.s):
             self.servers.append(Server())
@@ -58,6 +69,19 @@ class Queue:
 
         for i in self.servers:
             i.tick(n)
+
+    """
+        @function
+        simulation
+        @description
+        Function that creates a queue simulation by generating clients, servers and managing the queue. 
+        ----------
+        @parameters
+        ----------
+        self
+        time_limit: int
+                    variable to control the ammount of clients
+    """
 
     def simulation(self, time_limit):
         print("Beginning simulation:")
@@ -97,6 +121,17 @@ class Queue:
             self.time = self.event_list[0][1]
             self.tick(self.time - prev_time)
 
+    """
+        @function
+        get_n
+        @description
+        Function that controls and returns the amount of clients 
+        ----------
+        @parameters
+        ----------
+        self
+    """
+
     def get_n(self):
         n = 0
         for client in self.clients_on_servers:
@@ -104,6 +139,17 @@ class Queue:
                 n += 1
 
         return len(self.clients_on_wait) + n
+
+    """
+        @function
+        add_client_to_queue
+        @description
+        Function that adds a client to the queue.
+        ----------
+        @parameters
+        ----------
+        self
+    """
 
     def add_client_to_queue(self):
         if (self.get_n() <= self.lmax):
@@ -113,6 +159,19 @@ class Queue:
             print(
                 f"  {Fore.RED}client arrived but queue was full!{Style.RESET_ALL}")
             self.clients_lost += 1
+
+    """
+        @function
+        free_client_from_server
+        @description
+        Function that adds a frees a client from server when the serving process is done. 
+        ----------
+        @parameters
+        ----------
+        self
+        i:  int
+            works as an index to know which client the function is refering to.
+    """
 
     def free_client_from_server(self, i):
         self.clients_finished.append(self.servers[i].free_server())
