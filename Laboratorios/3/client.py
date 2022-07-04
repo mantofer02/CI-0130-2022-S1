@@ -17,15 +17,15 @@ class Client:
     def go_to_server(self):
         self.waiting = False
 
-    def increment_queue_time(self):
-        self.queue_time += 1
+    def increment_queue_time(self, n):
+        self.queue_time += n
 
-    def increment_serverd_time(self):
-        self.served_time += 1
+    def increment_serverd_time(self, n):
+        self.served_time += n
 
-    def tick(self):
+    def tick(self, n):
         if (not self.finished):
             if self.waiting:
-                self.increment_queue_time()
+                self.increment_queue_time(n)
             else:
-                self.increment_serverd_time()
+                self.increment_serverd_time(n)

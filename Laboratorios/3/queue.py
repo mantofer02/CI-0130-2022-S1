@@ -1,6 +1,25 @@
 from server import Server
 from client import Client
 from typing import List
+from math_util import rand_exp
+
+
+try:
+    from colorama import Fore
+    from colorama import Style
+except ModuleNotFoundError:
+    class Object():
+        pass
+    Fore = Object()
+    Style = Object()
+    Fore.YELLOW = ''
+    Fore.GREEN = ''
+    Fore.RED = ''
+    Style.RESET_ALL = ''
+
+TIME_LIMIT = 30
+ARRIVE_EVENT = 'arrive'
+SERVE_EVENT = 'serve'
 
 
 class Queue:
@@ -19,50 +38,64 @@ class Queue:
         self.clients_served = 0
         self.clients_lost = 0
 
+        self.event_list = []
+
         self.init_servers()
-        self.simulation(1000)
+        self.simulation(TIME_LIMIT)
+        self.print_results()
 
     def init_servers(self):
         for i in range(self.s):
             self.servers.append(Server())
 
-    def tick(self):
-        self.time += 1
+    def tick(self, n):
         for i in range(len(self.clients_on_wait)):
-            self.clients_on_wait[i].tick()
+            self.clients_on_wait[i].tick(n)
 
         for i in range(len(self.clients_on_servers)):
             if (self.clients_on_servers[i]):
-                self.clients_on_servers[i].tick()
+                self.clients_on_servers[i].tick(n)
 
         for i in self.servers:
-            i.tick()
+            i.tick(n)
 
     def simulation(self, time_limit):
-        lambd_counter = 0
-        while (self.time < time_limit):
-            # print("Lambda value = " + str(self.lambd(self.get_n())))
-            if (lambd_counter >= self.lambd(self.get_n())):
-                self.add_client_to_queue()
-                lambd_counter = 0
+        print("Beginning simulation:")
+        print(" Time Limit: " + str(TIME_LIMIT))
+        print(" Amount of servers: " + str(self.s))
+        print(" lmax: " + str(self.lmax))
+        print()
 
-            for i in range(len(self.servers)):
-                if (self.servers[i].serving_time >= self.lambd(self.get_n())):
-                    self.free_client_from_server(i)
+        tick_counter = 0
+        while (self.time < time_limit):
+            if (len(self.event_list)):
+                if (self.event_list[0][0] == ARRIVE_EVENT):
+                    self.add_client_to_queue()
+                    tick_counter = rand_exp(
+                        self.lambd(self.get_n())) + self.time
+                    self.event_list.append(
+                        (ARRIVE_EVENT, tick_counter, None))
+                    self.event_list.pop(0)
+                else:
+                    if (self.event_list[0][0] == SERVE_EVENT):
+                        self.free_client_from_server(self.event_list[0][2])
+                        self.event_list.pop(0)
+            else:
+                self.add_client_to_queue()
+                tick_counter = rand_exp(
+                    self.lambd(self.get_n())) + self.time
+                self.event_list.append(
+                    (ARRIVE_EVENT, tick_counter, None))
 
             for i in range(len(self.servers)):
                 if (self.servers[i].working() == False):
-                    if (len(self.clients_on_wait) > 0):
-                        print("client on server!")
-                        client = self.clients_on_wait.pop(0)
-                        client.set_wait(False)
-                        self.servers[i].add_client(client)
-                        self.clients_on_servers[i] = client
+                    self.add_client_to_server(i)
 
-            self.tick()
-            lambd_counter += 1
-        print(self.time)
-        input()
+            self.event_list.sort(key=lambda tup: tup[1])
+
+            prev_time = self.time
+            self.time = self.event_list[0][1]
+            self.tick(self.time - prev_time)
 
     def get_n(self):
         n = 0
@@ -74,14 +107,37 @@ class Queue:
 
     def add_client_to_queue(self):
         if (self.get_n() <= self.lmax):
-            print("client added to queue!")
+            print(f"  {Fore.RED}client added to queue!{Style.RESET_ALL}")
             self.clients_on_wait.append(Client())
+        else:
+            print(
+                f"  {Fore.RED}client arrived but queue was full!{Style.RESET_ALL}")
+            self.clients_lost += 1
 
     def free_client_from_server(self, i):
         self.clients_finished.append(self.servers[i].free_server())
         self.clients_on_servers[i] = None
-        print("client freed from system!")
+        print(f"  {Fore.GREEN}client freed from system!{Style.RESET_ALL}")
         self.clients_served += 1
 
+    def add_client_to_server(self, i):
+        if (len(self.clients_on_wait) > 0):
+            print(
+                f"  {Fore.YELLOW}server attending client!{Style.RESET_ALL}")
+            client = self.clients_on_wait.pop(0)
+            client.set_wait(False)
+            self.servers[i].add_client(client)
+            self.clients_on_servers[i] = client
+            self.event_list.append(
+                (SERVE_EVENT, rand_exp(self.mu(self.get_n())) + self.time, i))
+
     def print_results(self):
-        pass
+        print()
+        print("Results:")
+        print("    Clients Lost: " + str(self.clients_lost))
+        print("    Clients Served: " + str(self.clients_served))
+        idle_time = 0
+        for i in self.servers:
+            idle_time += i.free_time
+        print("    Servers idle time total: " + str(idle_time))
+        print("    Servers idle average time: " + str(idle_time/self.s))
