@@ -22,9 +22,31 @@ class Queue:
         self.init_servers()
         self.simulation(1000)
 
+    """
+        @function
+        init_servers
+        @description
+        Constructor that initializes servers.
+        ----------
+        @parameters
+        ----------
+        self
+    """
+
     def init_servers(self):
         for i in range(self.s):
             self.servers.append(Server())
+
+    """
+        @function
+        tick
+        @description
+        Function that simulates time via a ticking tool.
+        ----------
+        @parameters
+        ----------
+        self
+    """
 
     def tick(self):
         self.time += 1
@@ -37,6 +59,19 @@ class Queue:
 
         for i in self.servers:
             i.tick()
+
+    """
+        @function
+        simulation
+        @description
+        Function that creates a queue simulation by generating clients, servers and managing the queue. 
+        ----------
+        @parameters
+        ----------
+        self
+        time_limit: int
+                    variable to control the ammount of clients
+    """
 
     def simulation(self, time_limit):
         lambd_counter = 0
@@ -64,6 +99,17 @@ class Queue:
         print(self.time)
         input()
 
+    """
+        @function
+        get_n
+        @description
+        Function that controls and returns the amount of clients 
+        ----------
+        @parameters
+        ----------
+        self
+    """
+
     def get_n(self):
         n = 0
         for client in self.clients_on_servers:
@@ -72,16 +118,51 @@ class Queue:
 
         return len(self.clients_on_wait) + n
 
+    """
+        @function
+        add_client_to_queue
+        @description
+        Function that adds a client to the queue.
+        ----------
+        @parameters
+        ----------
+        self
+    """
+
     def add_client_to_queue(self):
         if (self.get_n() <= self.lmax):
             print("client added to queue!")
             self.clients_on_wait.append(Client())
+
+    """
+        @function
+        free_client_from_server
+        @description
+        Function that adds a frees a client from server when the serving process is done. 
+        ----------
+        @parameters
+        ----------
+        self
+        i:  int
+            works as an index to know which client the function is refering to.
+    """
 
     def free_client_from_server(self, i):
         self.clients_finished.append(self.servers[i].free_server())
         self.clients_on_servers[i] = None
         print("client freed from system!")
         self.clients_served += 1
+
+    """
+        @function
+        print_results
+        @description
+        Function that gives a specific printing format to the results. 
+        ----------
+        @parameters
+        ----------
+        self
+    """
 
     def print_results(self):
         pass
