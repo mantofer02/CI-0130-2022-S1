@@ -17,7 +17,7 @@ except ModuleNotFoundError:
     Fore.RED = ''
     Style.RESET_ALL = ''
 
-TIME_LIMIT = 30
+TIME_LIMIT = 1000
 ARRIVE_EVENT = 'arrive'
 SERVE_EVENT = 'serve'
 
@@ -196,7 +196,12 @@ class Queue:
         print("    Clients Lost: " + str(self.clients_lost))
         print("    Clients Served: " + str(self.clients_served))
         idle_time = 0
+        serving_time = 0
         for i in self.servers:
             idle_time += i.free_time
+            serving_time += i.serving_time
         print("    Servers idle time total: " + str(idle_time))
-        print("    Servers idle average time: " + str(idle_time/self.s))
+        print("    Servers average idle time: " + str(idle_time/self.s))
+        print("    Servers average serving time: " +
+              str(serving_time/self.s))
+        print("    Servers average serving time: " + str(serving_time))
