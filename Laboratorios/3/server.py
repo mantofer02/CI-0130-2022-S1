@@ -25,10 +25,11 @@ class Server:
         return False
 
     def increment_serving_time(self, n):
-        self.serving_time += 1
+        self.serving_time += n
 
     def increment_free_time(self, n):
-        self.free_time += 1
+        self.free_time += n
+        print(self.free_time)
 
     """
         @function
@@ -42,7 +43,6 @@ class Server:
     """
 
     def add_client(self, client: Client):
-        self.serving_time = 0
         self.current_client = client
 
     """
@@ -59,7 +59,6 @@ class Server:
     def free_server(self):
         client = self.current_client
         self.current_client = None
-        self.serving_time = 0
         return client
 
     def tick(self, n):

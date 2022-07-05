@@ -133,12 +133,7 @@ class Queue:
     """
 
     def get_n(self):
-        n = 0
-        for client in self.clients_on_servers:
-            if (client):
-                n += 1
-
-        return len(self.clients_on_wait) + n
+        return len(self.clients_on_wait) + self.s
 
     """
         @function
@@ -152,7 +147,7 @@ class Queue:
     """
 
     def add_client_to_queue(self):
-        if (self.get_n() <= self.lmax):
+        if (self.get_n() < self.lmax):
             print(f"  {Fore.RED}client added to queue!{Style.RESET_ALL}")
             self.clients_on_wait.append(Client())
         else:
@@ -204,4 +199,4 @@ class Queue:
         print("    Servers average idle time: " + str(idle_time/self.s))
         print("    Servers average serving time: " +
               str(serving_time/self.s))
-        print("    Servers average serving time: " + str(serving_time))
+        print("    Servers serving time: " + str(serving_time))
