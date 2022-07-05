@@ -74,7 +74,7 @@ class Queue:
         @function
         simulation
         @description
-        Function that creates a queue simulation by generating clients, servers and managing the queue. 
+        Function that creates a queue simulation by generating clients, servers and managing the queue.
         ----------
         @parameters
         ----------
@@ -125,7 +125,7 @@ class Queue:
         @function
         get_n
         @description
-        Function that controls and returns the amount of clients 
+        Function that controls and returns the amount of clients
         ----------
         @parameters
         ----------
@@ -159,7 +159,7 @@ class Queue:
         @function
         free_client_from_server
         @description
-        Function that adds a frees a client from server when the serving process is done. 
+        Function that adds a frees a client from server when the serving process is done.
         ----------
         @parameters
         ----------
@@ -195,8 +195,23 @@ class Queue:
         for i in self.servers:
             idle_time += i.free_time
             serving_time += i.serving_time
+
+        queue_time_client = 0
+
+        for i in self.clients_on_wait:
+            queue_time_client += i.queue_time
+
+        for i in self.clients_on_servers:
+            queue_time_client += i.queue_time
+
+        for i in self.clients_finished:
+            queue_time_client += i.queue_time
+
         print("    Servers idle time total: " + str(idle_time))
         print("    Servers average idle time: " + str(idle_time/self.s))
         print("    Servers average serving time: " +
               str(serving_time/self.s))
         print("    Servers serving time: " + str(serving_time))
+        print("    Total clients queue time: " + str(queue_time_client))
+        print("    Average clients queue time: " + str(queue_time_client /
+              (len(self.clients_on_wait) + (len(self.clients_on_servers) + (len(self.clients_finished))))))

@@ -29,7 +29,6 @@ class Server:
 
     def increment_free_time(self, n):
         self.free_time += n
-        print(self.free_time)
 
     """
         @function
