@@ -52,7 +52,4 @@ def lambd(n):
 
 def mu(n):
     value = 5 + (3*n)
-    if (value == 0):
-        print("soy gay")
-        input()
     return 5 + (3*n)
