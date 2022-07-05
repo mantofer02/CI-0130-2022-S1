@@ -1,10 +1,23 @@
-from typing import List
+
 from card import Card
 import numpy as np
 HAND_SIZE = 5
 
 
-def compare_hands(player: List[Card], opponent: List[Card]):
+def generate_cards_stack():
+    symbols = ['D', 'H', 'S', 'T']
+    numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+
+    stack = []
+
+    for i in range(len(numbers)):
+        for j in symbols:
+            stack.append(Card(numbers[i], j))
+
+    return stack
+
+
+def compare_hands(player: list[Card], opponent: list[Card]):
     player_numbers = []
     player_symbols = []
 
@@ -130,11 +143,11 @@ def compare_hands(player: List[Card], opponent: List[Card]):
     return get_high_card(player_numbers) > get_high_card(opponent_numbers)
 
 
-def is_royal_flush(cards_numbers: List[int]):
-    return 2 in cards_numbers and 11 in cards_numbers and 12 in cards_numbers and 13 in cards_numbers and 10 in cards_numbers
+def is_royal_flush(cards_numbers: list[int]):
+    return 1 in cards_numbers and 11 in cards_numbers and 12 in cards_numbers and 13 in cards_numbers and 10 in cards_numbers
 
 
-def is_straight_flush(cards_numbers: List[int]):
+def is_straight_flush(cards_numbers: list[int]):
     result = True
     cards_numbers.sort()
     for i in range(len(cards_numbers) - 1):
@@ -144,14 +157,14 @@ def is_straight_flush(cards_numbers: List[int]):
     return result
 
 
-def is_four_of_a_kind(cards_numbers: List[int]):
+def is_four_of_a_kind(cards_numbers: list[int]):
     cards_numbers.sort()
     if (cards_numbers.count([0]) == 4 or cards_numbers.count(cards_numbers[1]) == 4):
         return True
     return False
 
 
-def is_full_house(cards_numbers: List[int]):
+def is_full_house(cards_numbers: list[int]):
     cards_numbers.sort()
     if (cards_numbers.count(cards_numbers[0]) == 3 and cards_numbers.count(cards_numbers[3]) == 2):
         return True
@@ -160,11 +173,11 @@ def is_full_house(cards_numbers: List[int]):
     return False
 
 
-def is_flush(cards_symbols: List[str]):
+def is_flush(cards_symbols: list[str]):
     return cards_symbols.count(cards_symbols[0]) == HAND_SIZE
 
 
-def is_straight(cards_numbers: List[int], cards_symbols: List[str]):
+def is_straight(cards_numbers: list[int], cards_symbols: list[str]):
     cards_numbers, cards_symbols = double_selection_sort(
         cards_numbers, cards_symbols)
 
@@ -174,7 +187,7 @@ def is_straight(cards_numbers: List[int], cards_symbols: List[str]):
     return True
 
 
-def double_selection_sort(x: List[int], y: List[str]):
+def double_selection_sort(x: list[int], y: list[str]):
     for i in range(len(x)):
         swap = i + np.argmin(x[i:])
         (x[i], x[swap]) = (x[swap], x[i])
@@ -182,14 +195,14 @@ def double_selection_sort(x: List[int], y: List[str]):
     return x, y
 
 
-def is_three_of_a_kind(cards_numbers: List[int]):
+def is_three_of_a_kind(cards_numbers: list[int]):
     cards_numbers.sort()
     if (cards_numbers.count(cards_numbers[0]) == 3 or cards_numbers.count(cards_numbers[3]) == 3):
         return True
     return False
 
 
-def is_two_pair(cards_numbers: List[int]):
+def is_two_pair(cards_numbers: list[int]):
     cards_numbers.sort()
     for i in range(len(cards_numbers) - 1):
         if (cards_numbers.count(cards_numbers[i]) == 2):
@@ -199,7 +212,7 @@ def is_two_pair(cards_numbers: List[int]):
     return False
 
 
-def is_one_pair(cards_numbers: List[int]):
+def is_one_pair(cards_numbers: list[int]):
     cards_numbers.sort()
     for i in range(len(cards_numbers)):
         if (cards_numbers.count(cards_numbers[i]) == 2):
@@ -207,7 +220,7 @@ def is_one_pair(cards_numbers: List[int]):
     return False
 
 
-def get_high_card(cards_numbers: List[int]):
+def get_high_card(cards_numbers: list[int]):
     cards_numbers.sort()
     return cards_numbers[-1]
 
