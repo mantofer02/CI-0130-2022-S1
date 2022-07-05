@@ -1,10 +1,11 @@
 
 from congruential_generator import CongrentualGenerator
+import random_util
 
 
 def main():
-    myRandom = CongrentualGenerator(a=52, b=19, m=17)
-    print(myRandom.period())
+    abm = random_util.good_abm(10)
+    myRandom = CongrentualGenerator(a=abm[0], b=abm[1], m=abm[2])
 
 
 if __name__ == "__main__":
