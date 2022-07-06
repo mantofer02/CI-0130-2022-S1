@@ -1,19 +1,23 @@
 import time
 
 
-class CongrentualGenerator:
+class CongruentialGenerator:
     def __init__(self, a, b, m) -> None:
-        self.a = a
-        self.b = b
-        self.m = m
-        self.x = time.time()*1000
+        self.a = float(a)
+        self.b = float(b)
+        self.m = float(m)
+        self.x = float(time.time()*1000)
 
     def seed(self, s):
         self.x = s
 
     def random(self):
         self.x = (self.a*self.x + self.b) % self.m
-        return self.x / self.m
+        print(self.x)
+        print(self.m)
+        print(float(self.x / self.m))
+        input()
+        return float(self.x / self.m)
 
     def period(self):
         x = 0

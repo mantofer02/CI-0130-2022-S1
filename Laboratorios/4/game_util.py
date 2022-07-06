@@ -1,6 +1,7 @@
 
 from unittest import result
 from card import Card
+from congruential_generator import CongruentialGenerator
 import numpy as np
 
 HAND_SIZE = 5
@@ -10,17 +11,8 @@ OPPONENT_WON = -1
 NOBODY_WON = -2
 
 
-def generate_cards_stack():
-    symbols = ['D', 'H', 'S', 'T']
-    numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
-
-    stack = []
-
-    for i in range(len(numbers)):
-        for j in symbols:
-            stack.append(Card(numbers[i], j))
-
-    return stack
+def simulate(initial_cards, rolls, generator: CongruentialGenerator):
+    pass
 
 
 def compare_hands(player: list[Card], opponent: list[Card]):

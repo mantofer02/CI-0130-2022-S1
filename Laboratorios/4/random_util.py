@@ -1,4 +1,4 @@
-P = 5
+P = 11
 
 
 def good_abm(n):
