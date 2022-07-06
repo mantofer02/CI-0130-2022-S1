@@ -1,7 +1,13 @@
 
+from unittest import result
 from card import Card
 import numpy as np
+
 HAND_SIZE = 5
+TIE = 0
+PLAYER_WON = 1
+OPPONENT_WON = -1
+NOBODY_WON = -2
 
 
 def generate_cards_stack():
@@ -24,9 +30,6 @@ def compare_hands(player: list[Card], opponent: list[Card]):
     opponent_numbers = []
     opponent_symbols = []
 
-    player_round = False
-    opponent_round = False
-
     for i in player:
         player_numbers.append(i.number)
         player_symbols.append(i.symbol)
@@ -41,110 +44,122 @@ def compare_hands(player: list[Card], opponent: list[Card]):
     opponent_numbers, opponent_symbols = double_selection_sort(
         opponent_numbers, opponent_symbols)
 
-    player_round = is_royal_flush(player_numbers)
-    opponent_round = is_royal_flush(opponent_numbers)
+    result = win_by_royal_flush(
+        player_numbers, player_symbols, opponent_numbers, opponent_symbols)
 
-    if (opponent_round == player_round):
-        player_round = False
-        opponent_round = False
-    elif (opponent_round == True):
-        return False
-    else:
+    if (result == PLAYER_WON):
         return True
-
-    player_round = is_straight_flush(player_numbers)
-    opponent_round = is_straight_flush(opponent_numbers)
-
-    if (opponent_round == player_round):
-        player_round = False
-        opponent_round = False
-    elif (opponent_round == True):
+    elif (result == OPPONENT_WON):
         return False
-    else:
+
+    result = win_by_straight_flush(
+        player_numbers, player_symbols, opponent_numbers, opponent_symbols)
+
+    if (result == PLAYER_WON):
         return True
-
-    player_round = is_four_of_a_kind(player_numbers)
-    opponent_round = is_four_of_a_kind(opponent_numbers)
-
-    if (opponent_round == player_round):
-        player_round = False
-        opponent_round = False
-    elif (opponent_round == True):
+    elif (result == OPPONENT_WON):
         return False
-    else:
+
+    result = win_by_four_of_a_kind(player_numbers, opponent_numbers)
+
+    if (result == PLAYER_WON):
         return True
-
-    player_round = is_full_house(player_numbers)
-    opponent_round = is_full_house(opponent_numbers)
-
-    if (opponent_round == player_round):
-        player_round = False
-        opponent_round = False
-    elif (opponent_round == True):
+    elif (result == OPPONENT_WON):
         return False
-    else:
+
+    result = win_by_full_house(player_numbers, opponent_numbers)
+
+    if (result == PLAYER_WON):
         return True
-
-    player_round = is_flush(player_symbols)
-    opponent_round = is_flush(opponent_symbols)
-
-    if (opponent_round == player_round):
-        player_round = False
-        opponent_round = False
-    elif (opponent_round == True):
+    elif (result == OPPONENT_WON):
         return False
-    else:
+
+    result = win_by_flush(player_numbers, player_symbols,
+                          opponent_numbers, opponent_symbols)
+
+    if (result == PLAYER_WON):
         return True
-
-    player_round = is_straight(player_numbers, player_symbols)
-    opponent_round = is_straight(opponent_numbers, opponent_symbols)
-
-    if (opponent_round == player_round):
-        player_round = False
-        opponent_round = False
-    elif (opponent_round == True):
+    elif (result == OPPONENT_WON):
         return False
-    else:
+
+    result = win_by_straight(player_numbers, opponent_numbers)
+
+    if (result == PLAYER_WON):
         return True
-
-    player_round = is_three_of_a_kind(player_numbers)
-    opponent_round = is_three_of_a_kind(opponent_numbers)
-
-    if (opponent_round == player_round):
-        player_round = False
-        opponent_round = False
-    elif (opponent_round == True):
+    elif (result == OPPONENT_WON):
         return False
-    else:
+
+    result = win_by_three_of_a_kind(player_numbers, opponent_numbers)
+
+    if (result == PLAYER_WON):
         return True
-
-    player_round = is_two_pair(player_numbers)
-    opponent_round = is_two_pair(opponent_numbers)
-
-    if (opponent_round == player_round):
-        player_round = False
-        opponent_round = False
-    elif (opponent_round == True):
+    elif (result == OPPONENT_WON):
         return False
-    else:
+
+    result = win_by_two_pair(player_numbers, opponent_numbers)
+
+    if (result == PLAYER_WON):
         return True
-
-    player_round = is_one_pair(player_numbers)
-    opponent_round = is_one_pair(opponent_numbers)
-
-    if (opponent_round == player_round):
-        player_round = False
-        opponent_round = False
-    elif (opponent_round == True):
+    elif (result == OPPONENT_WON):
         return False
-    else:
+
+    result = win_by_one_pair(player_numbers, opponent_numbers)
+
+    if (result == PLAYER_WON):
         return True
+    elif (result == OPPONENT_WON):
+        return False
 
     return get_high_card(player_numbers) > get_high_card(opponent_numbers)
 
 
-def is_royal_flush(cards_numbers: list[int]):
-    return 1 in cards_numbers and 11 in cards_numbers and 12 in cards_numbers and 13 in cards_numbers and 10 in cards_numbers
+def double_selection_sort(x: list[int], y: list[str]):
+    for i in range(len(x)):
+        swap = i + np.argmin(x[i:])
+        (x[i], x[swap]) = (x[swap], x[i])
+        (y[i], y[swap]) = (y[swap], y[i])
+    return x, y
+
+
+def generic_tie_breaker(player_numbers, opponent_numbers):
+    for i in range(len(player_numbers)):
+        if player_numbers[i] > opponent_numbers[i]:
+            return PLAYER_WON
+        elif player_numbers[i] < opponent_numbers[i]:
+            return OPPONENT_WON
+
+
+def check_results(player_result, opponent_result):
+    if (player_result == True and opponent_result == True):
+        return TIE
+    if (player_result):
+        return PLAYER_WON
+
+    if (opponent_result):
+        return OPPONENT_WON
+
+    return NOBODY_WON
+
+
+def is_royal_flush(cards_numbers: list[int], cards_symbols: list[str]):
+    value = 1 in cards_numbers and 11 in cards_numbers and 12 in cards_numbers and 13 in cards_numbers and 10 in cards_numbers and cards_symbols.count(
+        cards_symbols[0]) == 5
+
+    return value
+
+
+def win_by_royal_flush(player_numbers: list[int], player_symbols, opponent_numbers: list[int], opponent_symbols):
+    player_result = is_royal_flush(player_numbers, player_symbols)
+    opponent_result = is_royal_flush(opponent_numbers, opponent_symbols)
+
+    result = check_results(player_result, opponent_result)
+
+    # No hay criterio de desempate, pero las probabilidades son bajas
+    # entonces se asume que si hay empate gana el jugador
+    if (result == TIE):
+        return PLAYER_WON
+
+    return result
 
 
 def is_straight_flush(cards_numbers: list[int]):
@@ -157,11 +172,37 @@ def is_straight_flush(cards_numbers: list[int]):
     return result
 
 
+def win_by_straight_flush(player_numbers, opponent_numbers):
+    player_result = is_straight_flush(player_numbers)
+    opponent_result = is_royal_flush(opponent_numbers)
+
+    result = check_results(player_result, opponent_result)
+
+    if (result == TIE):
+        for i in range(len(player_numbers)):
+            if player_numbers[i] > opponent_numbers[i]:
+                return PLAYER_WON
+            elif player_numbers[i] < opponent_numbers[i]:
+                return OPPONENT_WON
+    return result
+
+
 def is_four_of_a_kind(cards_numbers: list[int]):
     cards_numbers.sort()
     if (cards_numbers.count([0]) == 4 or cards_numbers.count(cards_numbers[1]) == 4):
         return True
     return False
+
+
+def win_by_four_of_a_kind(player_numbers, opponent_numbers):
+    player_result = is_four_of_a_kind(player_numbers)
+    opponent_result = is_four_of_a_kind(opponent_numbers)
+
+    result = check_results(player_result, opponent_result)
+
+    if (result == TIE):
+        result = generic_tie_breaker(player_numbers, opponent_numbers)
+    return result
 
 
 def is_full_house(cards_numbers: list[int]):
@@ -173,8 +214,32 @@ def is_full_house(cards_numbers: list[int]):
     return False
 
 
+def win_by_full_house(player_numbers, opponent_numbers):
+    player_result = is_full_house(player_numbers)
+    opponent_result = is_full_house(opponent_numbers)
+
+    result = check_results(player_result, opponent_result)
+
+    if (result == TIE):
+        result = generic_tie_breaker(player_numbers, opponent_numbers)
+
+    return result
+
+
 def is_flush(cards_symbols: list[str]):
     return cards_symbols.count(cards_symbols[0]) == HAND_SIZE
+
+
+def win_by_flush(player_numbers, player_symbols, opponent_numbers, opponent_symbols):
+    player_result = is_flush(player_symbols)
+    opponent_result = is_flush(opponent_symbols)
+
+    result = check_results(player_result, opponent_result)
+
+    if (result == TIE):
+        result = generic_tie_breaker(player_numbers, opponent_numbers)
+
+    return result
 
 
 def is_straight(cards_numbers: list[int], cards_symbols: list[str]):
@@ -187,12 +252,16 @@ def is_straight(cards_numbers: list[int], cards_symbols: list[str]):
     return True
 
 
-def double_selection_sort(x: list[int], y: list[str]):
-    for i in range(len(x)):
-        swap = i + np.argmin(x[i:])
-        (x[i], x[swap]) = (x[swap], x[i])
-        (y[i], y[swap]) = (y[swap], y[i])
-    return x, y
+def win_by_straight(player_numbers, player_symbols, opponent_numbers, opponent_symbols):
+    player_result = is_straight(player_numbers, player_symbols)
+    opponent_result = is_straight_flush(opponent_numbers, opponent_symbols)
+
+    result = check_results(player_result, opponent_result)
+
+    if (result == TIE):
+        result = generic_tie_breaker(player_numbers, opponent_numbers)
+
+    return result
 
 
 def is_three_of_a_kind(cards_numbers: list[int]):
@@ -200,6 +269,51 @@ def is_three_of_a_kind(cards_numbers: list[int]):
     if (cards_numbers.count(cards_numbers[0]) == 3 or cards_numbers.count(cards_numbers[3]) == 3):
         return True
     return False
+
+
+def win_by_three_of_a_kind(player_numbers, opponent_numbers):
+    player_result = is_straight(player_numbers)
+    opponent_result = is_straight_flush(opponent_numbers)
+
+    result = check_results(player_result, opponent_result)
+
+    if (result == TIE):
+
+        highest_player = 0
+        highest_opponent = 0
+
+        for i in range(len(player_numbers)):
+            if (player_numbers.count(player_numbers[i]) == 3):
+                if (player_numbers[i] > highest_player):
+                    highest_player = player_numbers[i]
+
+            if (opponent_numbers.count(opponent_numbers[i]) == 3):
+                if (opponent_numbers[i] > highest_opponent):
+                    highest_opponent = opponent_numbers[i]
+
+        if (highest_opponent > highest_player):
+            return OPPONENT_WON
+        elif (highest_opponent < highest_player):
+            return PLAYER_WON
+
+        highest_player = 0
+        highest_opponent = 0
+
+        for i in range(len(player_numbers)):
+            if (player_numbers.count(player_numbers[i]) < 3):
+                if (player_numbers[i] > highest_player):
+                    highest_player = player_numbers[i]
+
+            if (opponent_numbers.count(opponent_numbers[i]) < 3):
+                if (opponent_numbers[i] > highest_opponent):
+                    highest_opponent = opponent_numbers[i]
+
+        if (highest_opponent > highest_player):
+            return OPPONENT_WON
+        else:
+            return PLAYER_WON
+
+    return result
 
 
 def is_two_pair(cards_numbers: list[int]):
@@ -212,6 +326,18 @@ def is_two_pair(cards_numbers: list[int]):
     return False
 
 
+def win_by_two_pair(player_numbers, opponent_numbers):
+    player_result = is_two_pair(player_numbers)
+    opponent_result = is_two_pair(opponent_numbers)
+
+    result = check_results(player_result, opponent_result)
+
+    if (result == TIE):
+        result = generic_tie_breaker(player_numbers, opponent_numbers)
+
+    return result
+
+
 def is_one_pair(cards_numbers: list[int]):
     cards_numbers.sort()
     for i in range(len(cards_numbers)):
@@ -220,9 +346,18 @@ def is_one_pair(cards_numbers: list[int]):
     return False
 
 
+def win_by_one_pair(player_numbers, opponent_numbers):
+    player_result = is_one_pair(player_numbers)
+    opponent_result = is_one_pair(opponent_numbers)
+
+    result = check_results(player_result, opponent_result)
+
+    if (result == TIE):
+        result = generic_tie_breaker(player_numbers, opponent_numbers)
+
+    return result
+
+
 def get_high_card(cards_numbers: list[int]):
     cards_numbers.sort()
     return cards_numbers[-1]
-
-
-print(is_two_pair([2, 2, 4, 5, 5]))
