@@ -38,6 +38,9 @@ def simulate(initial_cards, rolls, generator: CongruentialGenerator):
         player_cards = []
         opponent_cards = []
 
+        if (len(stack) < 7):
+            stack = generate_cards_stack()
+
         for j in range(2):
             opponent_initial_cards.append(
                 stack.pop(int(generator.random() * len(stack))))
