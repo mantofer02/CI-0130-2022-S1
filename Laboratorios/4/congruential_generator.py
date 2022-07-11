@@ -13,10 +13,6 @@ class CongruentialGenerator:
 
     def random(self):
         self.x = (self.a*self.x + self.b) % self.m
-        print(self.x)
-        print(self.m)
-        print(float(self.x / self.m))
-        input()
         return float(self.x / self.m)
 
     def period(self):

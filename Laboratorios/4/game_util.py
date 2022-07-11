@@ -3,6 +3,7 @@ from unittest import result
 from card import Card
 from congruential_generator import CongruentialGenerator
 import numpy as np
+import itertools as it
 
 HAND_SIZE = 5
 TIE = 0
@@ -11,8 +12,75 @@ OPPONENT_WON = -1
 NOBODY_WON = -2
 
 
+def generate_cards_stack():
+    symbols = ['D', 'H', 'S', 'T']
+    numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+
+    stack = []
+
+    for i in range(len(numbers)):
+        for j in symbols:
+            stack.append(Card(numbers[i], j))
+
+    return stack
+
+
 def simulate(initial_cards, rolls, generator: CongruentialGenerator):
-    pass
+    player_wins = 0
+    opponent_wins = 0
+    ties = 0
+
+    for i in range(rolls):
+        opponent_initial_cards: list[Card] = []
+        player_best_hand: list[Card] = []
+        opponent_best_hand: list[Card] = []
+        stack = generate_cards_stack()
+        player_cards = []
+        opponent_cards = []
+
+        for j in range(2):
+            opponent_initial_cards.append(
+                stack.pop(int(generator.random() * len(stack))))
+
+        player_cards = initial_cards[:]
+        opponent_cards = opponent_initial_cards[:]
+
+        for k in range(5):
+            table_card = stack.pop(int(generator.random() * len(stack)))
+            player_cards.append(table_card)
+            opponent_cards.append(table_card)
+
+        player_best_hand = get_best_combination(player_cards)
+        opponent_best_hand = get_best_combination(opponent_cards)
+
+        result = compare_hands(player=player_best_hand,
+                               opponent=opponent_best_hand)
+
+        if (result):
+            player_wins += 1
+        else:
+            opponent_wins += 1
+
+    return (float(player_wins / rolls), float(ties / rolls), float(opponent_wins / rolls))
+
+
+def combinations_data(iter, length):
+    return list(it.combinations(iter, length))
+
+
+def get_best_combination(initial_cards):
+    combinations_array = list(combinations_data(initial_cards, 5))
+    results = []
+    for i in range(len(combinations_array)):
+        results.append(0)
+        for j in range(len(combinations_array)):
+            if (i != j):
+                win = compare_hands(
+                    combinations_array[i], combinations_array[j])
+                if (win == True):
+                    results[i] += 1
+
+    return combinations_array[results.index(max(results))]
 
 
 def compare_hands(player: list[Card], opponent: list[Card]):
@@ -44,8 +112,7 @@ def compare_hands(player: list[Card], opponent: list[Card]):
     elif (result == OPPONENT_WON):
         return False
 
-    result = win_by_straight_flush(
-        player_numbers, player_symbols, opponent_numbers, opponent_symbols)
+    result = win_by_straight_flush(player_numbers, opponent_numbers)
 
     if (result == PLAYER_WON):
         return True
@@ -74,7 +141,8 @@ def compare_hands(player: list[Card], opponent: list[Card]):
     elif (result == OPPONENT_WON):
         return False
 
-    result = win_by_straight(player_numbers, opponent_numbers)
+    result = win_by_straight(
+        player_numbers, player_symbols, opponent_numbers, opponent_symbols)
 
     if (result == PLAYER_WON):
         return True
@@ -166,7 +234,7 @@ def is_straight_flush(cards_numbers: list[int]):
 
 def win_by_straight_flush(player_numbers, opponent_numbers):
     player_result = is_straight_flush(player_numbers)
-    opponent_result = is_royal_flush(opponent_numbers)
+    opponent_result = is_straight_flush(opponent_numbers)
 
     result = check_results(player_result, opponent_result)
 
@@ -246,7 +314,7 @@ def is_straight(cards_numbers: list[int], cards_symbols: list[str]):
 
 def win_by_straight(player_numbers, player_symbols, opponent_numbers, opponent_symbols):
     player_result = is_straight(player_numbers, player_symbols)
-    opponent_result = is_straight_flush(opponent_numbers, opponent_symbols)
+    opponent_result = is_straight(opponent_numbers, opponent_symbols)
 
     result = check_results(player_result, opponent_result)
 
@@ -264,8 +332,8 @@ def is_three_of_a_kind(cards_numbers: list[int]):
 
 
 def win_by_three_of_a_kind(player_numbers, opponent_numbers):
-    player_result = is_straight(player_numbers)
-    opponent_result = is_straight_flush(opponent_numbers)
+    player_result = is_three_of_a_kind(player_numbers)
+    opponent_result = is_three_of_a_kind(opponent_numbers)
 
     result = check_results(player_result, opponent_result)
 
