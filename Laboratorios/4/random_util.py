@@ -1,17 +1,22 @@
+import math as ma
 P = 11
 
 
 def good_abm(n):
-    m = n + 1
-    while (not is_prime(m)):
-        m += 1
+    k = int(ma.log2(n))
+    m = pow(2, k)
+    while (m < n):
+        k += 1
+        m = pow(2, k)
 
-    b = m + 1
-    while (not is_prime(b)):
+    c = n + 1
+    a = 4*c + 1
+
+    b = a + 1
+
+    if (b % 2 == 0):
         b += 1
 
-    p = P
-    a = (p*m) + 1
     return (a, b, m)
 
 

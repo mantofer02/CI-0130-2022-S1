@@ -1,4 +1,5 @@
 
+from typing import List
 from unittest import result
 from card import Card
 from congruential_generator import CongruentialGenerator
@@ -26,26 +27,38 @@ def generate_cards_stack():
 
 
 def simulate(initial_cards, rolls, generator: CongruentialGenerator):
+
     player_wins = 0
     opponent_wins = 0
     ties = 0
+
+    player_initial_cards: list[Card] = []
+
+    stack = generate_cards_stack()
+    for i in initial_cards:
+        player_initial_cards.append(stack.pop(i))
+
+    print(" Player initial cards")
+    for i in player_initial_cards:
+        i.print_card()
 
     for i in range(rolls):
         opponent_initial_cards: list[Card] = []
         player_best_hand: list[Card] = []
         opponent_best_hand: list[Card] = []
-        stack = generate_cards_stack()
         player_cards = []
         opponent_cards = []
 
         if (len(stack) < 7):
             stack = generate_cards_stack()
+            for i in initial_cards:
+                stack.pop(i)
 
         for j in range(2):
             opponent_initial_cards.append(
                 stack.pop(int(generator.random() * len(stack))))
 
-        player_cards = initial_cards[:]
+        player_cards = player_initial_cards[:]
         opponent_cards = opponent_initial_cards[:]
 
         for k in range(5):
