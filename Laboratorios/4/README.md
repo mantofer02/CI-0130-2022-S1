@@ -10,12 +10,12 @@ This project was developed by:
 - <u>A Pair of AA's</u>: 
     <p><b>Wins %:</b> 52.2</p>
     <p><b>Losses %:</b> 47.8</p>
-    ![pairAAs](https://imgur.com/AqHHX73)
+    ![pairAAs](https://i.imgur.com/AqHHX73.png)
 - <u>A Pair of 22's</u>: 
     <p><b>Wins %:</b> 52.54</p>
     <p><b>Losses %:</b> 47.59</p>
-    ![pair22s](https://imgur.com/zfKBQot)
+    ![pair22s](https://i.imgur.com/zfKBQot.png)
 - <u>2 and 7 from a different suit</u>:
     <p><b>Wins %:</b> 34.49</p>    
     <p><b>Losses %:</b> 65.51</p>
-    ![pair27s](https://imgur.com/Nqus0fJ)
+    ![pair27s](https://i.imgur.com/Nqus0fJ.png)
