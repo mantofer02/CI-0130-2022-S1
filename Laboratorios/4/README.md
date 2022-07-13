@@ -10,7 +10,7 @@ This project was developed by:
 - <u>A Pair of AA's</u>: 
     <p><b>Wins %:</b> 52.2</p>
     <p><b>Losses %:</b> 47.8</p>
-    ![pairAAs](pairAAs.png)
+    ![pairAAs](CI-0130-2022-S1\Laboratorios\4\pairAAs.png)
 - <u>A Pair of 22's</u>: 
     <p><b>Wins %:</b> 52.54</p>
     <p><b>Losses %:</b> 47.59</p>
