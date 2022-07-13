@@ -1,4 +1,3 @@
-
 from congruential_generator import CongruentialGenerator
 from card import Card
 import random_util

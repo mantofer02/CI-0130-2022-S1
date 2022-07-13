@@ -22,7 +22,6 @@ def generate_cards_stack():
     for i in range(len(numbers)):
         for j in symbols:
             stack.append(Card(numbers[i], j))
-
     return stack
 
 
