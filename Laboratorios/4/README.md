@@ -11,16 +11,20 @@ It is important to note that, the simulation has been run with smaller values be
 
 When the tests are executed the values used are the following:
 <code>
+
     player_cards_numbers.append(index)
     stack.pop(index)
     player_cards_numbers.append(indexTwo)
     stack.pop(indexTwo)
+
 </code>
 Where the index value is decided by the Card array generated. To obtain the desired value expected it is important to take into account that the stack pops the value, changing the position of <i>n+k</i> values in the array. 
 
 <code>
+
     symbols = ['D', 'H', 'S', 'T']
     numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+
 </code>
 
 The order is shown as follows: [ 1D, 1H, 1S, 1T, 2D, 2H, 2S, 2T, 3D, 3H, 3S, 3T, 4D, 4H, ... ]
