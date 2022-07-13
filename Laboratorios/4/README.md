@@ -8,11 +8,14 @@ This project was developed by:
 <p>When the test cases are run the following results come up:</p>
 
 - <u>A Pair of AA's</u>: 
-    <p><b>Winning:</b> 52.2</p>
-    <p><b>Losing:</b> 47.8</p>
+    <p><b>Wins %:</b> 52.2</p>
+    <p><b>Losses %:</b> 47.8</p>
+    ![pairAAs](pairAAs.png)
 - <u>A Pair of 22's</u>: 
-    <p><b>Winning:</b> 52.54</p>
-    <p><b>Losing:</b> 47.59</p>
+    <p><b>Wins %:</b> 52.54</p>
+    <p><b>Losses %:</b> 47.59</p>
+    ![pair22s](pair22s.png)
 - <u>2 and 7 from a different suit</u>:
-    <p><b>Winning:</b> 34.49</p>    
-    <p><b>Losing:</b> 65.51</p>
+    <p><b>Wins %:</b> 34.49</p>    
+    <p><b>Losses %:</b> 65.51</p>
+    ![pair27s](pair27s.png)
