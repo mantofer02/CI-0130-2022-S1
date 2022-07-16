@@ -133,7 +133,7 @@ class Quarto():
             self.phase = QuartoPhase.FINISHED
 
 
-def random_action(env):
+def random_action(env: Quarto):
     time.sleep(3)
     print("random action")
     return random.choice(env.get_available_actions())
