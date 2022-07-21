@@ -135,7 +135,6 @@ class Quarto():
 
 def random_action(env: Quarto):
     time.sleep(3)
-    print("random action")
     return random.choice(env.get_available_actions())
 
 
