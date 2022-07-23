@@ -1,7 +1,8 @@
+from platform import node
 import quarto
 from quarto import Quarto
 import random
-
+AI_WIN = 1
 ITERATIONS = 10
 
 
@@ -24,41 +25,45 @@ class Node(object):
 
 def mcts(root: Quarto, time_limit=0.25, exploitation=0.5):
     tree_root: Node = Node(root)
-    unexplored_nodes = []
-    explored_nodes = []
+    # unexplored_nodes = []
+    # explored_nodes = []
 
-    expand_node(tree_root, unexplored_nodes)
+    current_node = tree_root
+    while(current_node.state.has_finished() == False):
+        rand_value = random.random()
+        if current_node.explored == True and rand_value > exploitation:
+            """
+            Si este estado ha sido explorado antes, entonces genere un número
+            al azar, de ser mayor al exploitation entonces se elige la acción
+            que lleva al mejor estado conocido
+            """
+            pass
+        else:
+            current_node.explored = True
+            current_node = expand_node(current_node)
+    if current_node.state.get_winner() == AI_WIN:
+        current_node.result = [1, 0]
+    else:
+        current_node.result = [0, 1]
 
     # aqui se selecciona a un hijo random
-    select_node(tree_root.children[0], explored_nodes)
+    # select_node(tree_root.children[0], explored_nodes)
 
 # Return none is it has all children, so it does not expand
 
 
-def expand_node(node: Node, unexplored_nodes):
+def expand_node(node: Node):
     actions = node.state.get_available_actions()
-    if len(node.children) == len(actions):
-        return None
-
     index = random.randint(0, len(actions) - 1)
     child = Node(state=node.state.do_action(action=actions[index]), id=index)
 
-    while (is_duplicate(node, child)):
-        index = (index + 1) % len(actions)
-        child = Node(state=node.state.do_action(
-            action=actions[index]), id=index)
+    if (is_duplicate(node, child)):
+        return get_duplicate(node, child)
 
-    child.set_parent(node)
-    node.add_child(child)
-    unexplored_nodes.append(child)
-
-    print(child.id)
-    return child
-
-
-def select_node(node: Node, explored_nodes):
-    node.explored = True
-    explored_nodes.append(node)
+    else:
+        child.set_parent(node)
+        node.add_child(child)
+        return child
 
 
 def is_duplicate(node: Node, child: Node):
@@ -66,6 +71,12 @@ def is_duplicate(node: Node, child: Node):
         if i.id == child.id:
             return True
     return False
+
+
+def get_duplicate(node: Node, child: Node):
+    for i in node.children:
+        if i.id == child.id:
+            return i
 
 
 root = Node(Quarto())
