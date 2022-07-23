@@ -52,6 +52,7 @@ def expand_node(node: Node, unexplored_nodes):
     node.add_child(child)
     unexplored_nodes.append(child)
 
+    print(child.id)
     return child
 
 
@@ -65,3 +66,7 @@ def is_duplicate(node: Node, child: Node):
         if i.id == child.id:
             return True
     return False
+
+
+root = Node(Quarto())
+expand_node(root, [])
