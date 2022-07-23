@@ -80,4 +80,4 @@ def get_duplicate(node: Node, child: Node):
 
 
 root = Node(Quarto())
-expand_node(root, [])
+expand_node(root)
