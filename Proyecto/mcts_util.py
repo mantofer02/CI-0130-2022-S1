@@ -10,7 +10,7 @@ class Node(object):
     def __init__(self, state, id=0):
         self.state: Quarto = state
         self.children: list[Node] = []
-        self.parent: Quarto = None
+        self.parent: Node = None
         self.explored = False
         self.id = id
         # AI WINS/ PLAYER WINS
@@ -29,22 +29,38 @@ def mcts(root: Quarto, time_limit=0.25, exploitation=0.5):
     # explored_nodes = []
 
     current_node = tree_root
-    while(current_node.state.has_finished() == False):
+    while(not current_node.state.has_finished()):
         rand_value = random.random()
-        if current_node.explored == True and rand_value > exploitation:
+        if (current_node.explored == True and rand_value > exploitation):
             """
             Si este estado ha sido explorado antes, entonces genere un número
             al azar, de ser mayor al exploitation entonces se elige la acción
             que lleva al mejor estado conocido
             """
-            pass
+            
         else:
             current_node.explored = True
             current_node = expand_node(current_node)
+
+    # Si en el estado final gana la IA
     if current_node.state.get_winner() == AI_WIN:
         current_node.result = [1, 0]
+
+        end = False
+        while (current_node is not tree_root and not end):
+            for child in current_node.parent.children:
+                if (child.result == [0, 1]):
+                    end = True
+                else:
+                    current_node.parent.result = current_node.result
+                    current_node = current_node.parent
+
     else:
         current_node.result = [0, 1]
+
+        while (current_node is not tree_root):
+            current_node.parent.result = current_node.result
+            current_node = current_node.parent
 
     # aqui se selecciona a un hijo random
     # select_node(tree_root.children[0], explored_nodes)
