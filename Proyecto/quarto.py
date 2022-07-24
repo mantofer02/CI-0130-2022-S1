@@ -41,7 +41,7 @@ class Node(object):
         self.parent = parent
 
 
-def mcts(root, time_limit=0.25, exploitation=0.5):
+def mcts(root, time_limit=1, exploitation=0.5):
     tree_root: Node = Node(root)
     elapsed_time = 0
     start_time = time.time()
@@ -94,13 +94,9 @@ def mcts(root, time_limit=0.25, exploitation=0.5):
 
     current_node = tree_root
     current_node = find_best_child(current_node)
-    print(current_node.probability)
-    # input()
+    for i in tree_root.children:
+        print("[" + str(i.probability) + "]")
 
-    # if (current_node.result != [1, 0]):
-    #     current_node = find_best_child(current_node)
-
-    print(expansion)
     return current_node.action
 
 # Return none is it has all children, so it does not expand
@@ -111,8 +107,10 @@ def find_best_child(current_node: Node):
     best_probability = 0
     for i in range(len(current_node.children)):
         if current_node.children[i].probability > best_probability:
+            best_probability = current_node.children[i].probability
             best_child = i
 
+    print(best_child)
     return current_node.children[best_child]
 
 
