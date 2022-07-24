@@ -2,6 +2,7 @@ from platform import node
 import quarto
 from quarto import Quarto
 import random
+import time
 AI_WIN = 1
 ITERATIONS = 10
 
@@ -29,8 +30,10 @@ def mcts(root: Quarto, time_limit=0.25, exploitation=0.5):
     # unexplored_nodes = []
     # explored_nodes = []
 
-    count = 10
-    while (count > 0):
+    elapsed_time = 0
+    start_time = time.time()
+    while (elapsed_time < time_limit):
+
         current_node = tree_root
         while(not current_node.state.has_finished()):
             rand_value = random.random()
@@ -73,7 +76,8 @@ def mcts(root: Quarto, time_limit=0.25, exploitation=0.5):
                 current_node.parent.result = current_node.result
                 current_node = current_node.parent
 
-        count -= 1
+        end_time = time.time()
+        elapsed_time = end_time - start_time
 
     # aqui se selecciona a un hijo random
     # select_node(tree_root.children[0], explored_nodes)
@@ -83,7 +87,7 @@ def mcts(root: Quarto, time_limit=0.25, exploitation=0.5):
     if (current_node.result != [1, 0]):
         current_node = find_best_state(current_node)
 
-    return current_node
+    return current_node.state
 
 # Return none is it has all children, so it does not expand
 
