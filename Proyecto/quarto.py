@@ -26,7 +26,6 @@ class Node(object):
         self.games_played = 0.0
         self.ai_wins = 0.0
         self.probability = 0.0
-        # AI WINS/ PLAYER WINS
 
     def set_probability(self):
         if (self.games_played > 0):
