@@ -1,8 +1,10 @@
 from platform import node
+import sys
 import quarto
 from quarto import Quarto
 import random
 import time
+import sys as sys
 AI_WIN = 1
 ITERATIONS = 10
 
@@ -15,6 +17,7 @@ class Node(object):
         self.explored = False
         self.id = id
         self.leads_to_one = False
+        self.steps = sys.maxsize
         # AI WINS/ PLAYER WINS
         self.result = [0, 0]
 
@@ -26,6 +29,7 @@ class Node(object):
 
 
 def mcts(root: Quarto, time_limit=0.25, exploitation=0.5):
+    print("OJAILO SIGNIFICA FAMILIA")
     tree_root: Node = Node(root)
     # unexplored_nodes = []
     # explored_nodes = []
@@ -35,6 +39,9 @@ def mcts(root: Quarto, time_limit=0.25, exploitation=0.5):
     while (elapsed_time < time_limit):
 
         current_node = tree_root
+
+        step = 0
+
         while(not current_node.state.has_finished()):
             rand_value = random.random()
             if (current_node.explored and rand_value > exploitation):
@@ -45,35 +52,36 @@ def mcts(root: Quarto, time_limit=0.25, exploitation=0.5):
                 """
                 # current_node = find_best_state(current_node)
                 index = 0
-                chosen = False
-                while (not chosen and index < len(current_node.children)):
+                while (index < len(current_node.children)):
                     current_child = current_node.children[index]
-                    if (current_child.result == [1, 0]):
+                    if (current_child.result[0] == 1 & current_child.result[1] <= current_node.resul[1]):
                         current_node = current_child
-                        chosen = True
-                    else:
-                        index += 1
+                    index += 1
             else:
                 current_node.explored = True
                 current_node = expand_node(current_node)
 
+            step = step+1
+
         # Si en el estado final gana la IA
         if current_node.state.get_winner() == AI_WIN:
-            current_node.result = [1, 0]
+            current_node.result = [1, step]
 
             while (current_node != tree_root):
                 current_node.leads_to_one = True
 
-                if (ai_wins(current_node)):        
-                    current_node.parent.result = current_node.result
+                if (ai_wins(current_node)): 
+                    if(current_node.parent.result[1]>current_node.result[1]):    
+                        current_node.parent.result = current_node.result
                     
                 current_node = current_node.parent
 
         else:
-            current_node.result = [0, 1]
+            current_node.result = [0, step]
 
             while (current_node != tree_root):
-                current_node.parent.result = current_node.result
+                if(current_node.parent.result[1]>current_node.result[1]):
+                    current_node.parent.result = current_node.result
                 current_node = current_node.parent
 
         end_time = time.time()
@@ -84,7 +92,7 @@ def mcts(root: Quarto, time_limit=0.25, exploitation=0.5):
 
     current_node = tree_root
     print(f"SOY RAIZ {current_node.result}")
-    if (current_node.result != [1, 0]):
+    if (current_node.result[0] != 1):
         current_node = find_best_state(current_node)
 
     return current_node.state
@@ -93,7 +101,7 @@ def mcts(root: Quarto, time_limit=0.25, exploitation=0.5):
 
 def ai_wins(current_node: Node):
     for child in current_node.parent.children:
-        if (child.result == [0, 1]):
+        if (child.result[0] == 0):
             return False
 
     return True
@@ -108,7 +116,7 @@ def find_best_state(current_node: Node):
     result_node: Node = current_node
     while (not chosen and index < len(current_node.children)):
         current_child = current_node.children[index]
-        if (current_child.result == [1, 0]):
+        if (current_child.result[0] == 1 & current_child.result[1] < result_node.resul[1]):
             print("Sirve")
             result_node = current_child
             chosen = True
