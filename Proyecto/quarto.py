@@ -45,7 +45,6 @@ def mcts(root, time_limit=1, exploitation=0.5):
     start_time = time.time()
     expansion = 0
 
-    print("Working")
     while (elapsed_time < time_limit):
 
         current_node = tree_root
@@ -75,8 +74,6 @@ def mcts(root, time_limit=1, exploitation=0.5):
 
     current_node = tree_root
     current_node = find_best_child(current_node)
-    # for i in tree_root.children:
-    #     print("[" + str(i.probability) + "]")
 
     return current_node.action
 
