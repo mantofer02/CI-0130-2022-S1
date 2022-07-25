@@ -61,11 +61,11 @@ def mcts(root: Quarto, time_limit=0.25, exploitation=0.5):
                 current_node.explored = True
                 current_node = expand_node(current_node)
 
-            step = step+1
+            steps = steps+1
 
         # Si en el estado final gana la IA
         if current_node.state.get_winner() == AI_WIN:
-            current_node.result = [1, step]
+            current_node.result = [1, steps]
 
             while (current_node != tree_root):
                 current_node.leads_to_one = True
