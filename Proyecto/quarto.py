@@ -23,12 +23,10 @@ class Node(object):
         self.parent: Node = None
         self.explored = False
         self.id = id
-        self.leads_to_one = False
         self.games_played = 0.0
         self.ai_wins = 0.0
         self.probability = 0.0
         # AI WINS/ PLAYER WINS
-        self.result = [0, 0]
 
     def set_probability(self):
         if (self.games_played > 0):
@@ -54,28 +52,11 @@ def mcts(root, time_limit=1, exploitation=0.5):
         while(not current_node.state.has_finished()):
             rand_value = random.random()
             if (current_node.explored and rand_value > exploitation):
-                """
-                Si este estado ha sido explorado antes, entonces genere un número
-                al azar, de ser mayor al exploitation entonces se elige la acción
-                que lleva al mejor estado conocido
-                """
-                # current_node = find_best_state(current_node)
-                # index = 0
-                # chosen = False
-                # while (not chosen and index < len(current_node.children)):
-                #     current_child = current_node.children[index]
-                #     if (current_child.result == [1, 0]):
-                #         current_node = current_child
-                #         chosen = True
-                #     else:
-                #         index += 1
                 current_node = find_best_child(current_node)
             else:
                 current_node.explored = True
                 current_node = expand_node(current_node)
                 expansion += 1
-
-        # Si en el estado final gana la IA
 
         current_node.games_played += 1
         if (current_node.state.get_winner() == AI_WIN):
@@ -94,8 +75,8 @@ def mcts(root, time_limit=1, exploitation=0.5):
 
     current_node = tree_root
     current_node = find_best_child(current_node)
-    for i in tree_root.children:
-        print("[" + str(i.probability) + "]")
+    # for i in tree_root.children:
+    #     print("[" + str(i.probability) + "]")
 
     return current_node.action
 
