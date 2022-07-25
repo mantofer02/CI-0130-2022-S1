@@ -77,8 +77,6 @@ def mcts(root, time_limit=1, exploitation=0.5):
 
     return current_node.action
 
-# Return none is it has all children, so it does not expand
-
 
 def find_best_child(current_node: Node):
     best_child = 0
